@@ -1,0 +1,650 @@
+{
+  "info": {
+    "name": "Kaisei Client Desk API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Try the whole API in order. Set the collection variable baseUrl to http://localhost:5000/api"
+  },
+  "item": [
+    {
+      "name": "0. Health check (API + database)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      }
+    },
+    {
+      "name": "1. Dashboard stats",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/stats",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "stats"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Create client",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/clients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ravi Menon\",\n  \"company\": \"Kadamba Books\",\n  \"email\": \"ravi@kadambabooks.in\",\n  \"phone\": \"+91 90000 11111\"\n}"
+        }
+      }
+    },
+    {
+      "name": "2b. Create client - duplicate email (409)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/clients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Copy\",\n  \"email\": \"ravi@kadambabooks.in\"\n}"
+        }
+      }
+    },
+    {
+      "name": "2c. Create client - invalid email (400)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/clients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test\",\n  \"email\": \"not-an-email\"\n}"
+        }
+      }
+    },
+    {
+      "name": "3. List clients",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/clients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3b. Search clients",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/clients?search=kadamba",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "kadamba"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Get one client (with projects + invoices)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/clients/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Update client",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/clients/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients",
+            "1"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ravi Menon\",\n  \"company\": \"Kadamba Books & Prints\",\n  \"email\": \"ravi@kadambabooks.in\",\n  \"phone\": \"+91 90000 11111\"\n}"
+        }
+      }
+    },
+    {
+      "name": "6. Create project",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/projects",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": 1,\n  \"title\": \"Author events microsite\",\n  \"brief\": \"Event listings with RSVP form.\",\n  \"deadline\": \"2026-12-20\",\n  \"budgetRupees\": 35000\n}"
+        }
+      }
+    },
+    {
+      "name": "6b. Create project - bad date (400)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/projects",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": 1,\n  \"title\": \"Test\",\n  \"deadline\": \"2026-02-31\"\n}"
+        }
+      }
+    },
+    {
+      "name": "6c. Create project - unknown client (404)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/projects",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": 9999,\n  \"title\": \"Ghost\",\n  \"deadline\": \"2026-12-01\"\n}"
+        }
+      }
+    },
+    {
+      "name": "7. List projects (sorted by deadline)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/projects",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7b. Filter: active projects",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/projects?status=ACTIVE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "ACTIVE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7c. Filter: one client, newest first",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/projects?clientId=1&sort=createdAt&order=desc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects"
+          ],
+          "query": [
+            {
+              "key": "clientId",
+              "value": "1"
+            },
+            {
+              "key": "sort",
+              "value": "createdAt"
+            },
+            {
+              "key": "order",
+              "value": "desc"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Get one project",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/projects/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Update project",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/projects/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects",
+            "1"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": 1,\n  \"title\": \"Author events microsite v2\",\n  \"brief\": \"Event listings, RSVP, photo gallery.\",\n  \"deadline\": \"2026-12-31\",\n  \"budgetRupees\": 38000\n}"
+        }
+      }
+    },
+    {
+      "name": "10. Change project status",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/projects/1/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects",
+            "1",
+            "status"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"ACTIVE\"\n}"
+        }
+      }
+    },
+    {
+      "name": "10b. Invalid status (400)",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/projects/1/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects",
+            "1",
+            "status"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"DONE\"\n}"
+        }
+      }
+    },
+    {
+      "name": "11. Create invoice",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/invoices",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"projectId\": 1,\n  \"amountRupees\": 15000,\n  \"issuedOn\": \"2026-10-26\",\n  \"dueOn\": \"2026-11-09\",\n  \"note\": \"Advance\"\n}"
+        }
+      }
+    },
+    {
+      "name": "11b. Invoice - due before issued (400)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/invoices",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices"
+          ]
+        },
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"projectId\": 1,\n  \"amountRupees\": 100,\n  \"issuedOn\": \"2026-10-26\",\n  \"dueOn\": \"2026-10-01\"\n}"
+        }
+      }
+    },
+    {
+      "name": "12. List invoices",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/invoices",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices"
+          ]
+        }
+      }
+    },
+    {
+      "name": "12b. Filter: unpaid invoices",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/invoices?status=UNPAID",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "UNPAID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "13. Mark invoice paid",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/invoices/1/mark-paid",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices",
+            "1",
+            "mark-paid"
+          ]
+        }
+      }
+    },
+    {
+      "name": "13b. Mark paid twice (409)",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/invoices/1/mark-paid",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices",
+            "1",
+            "mark-paid"
+          ]
+        }
+      }
+    },
+    {
+      "name": "14. Void an invoice",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/invoices/2/void",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices",
+            "2",
+            "void"
+          ]
+        }
+      }
+    },
+    {
+      "name": "15. Delete invoice",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/invoices/2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoices",
+            "2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "16. Delete client with projects (409)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/clients/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "17. Delete project",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/projects/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "projects",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "18. Delete empty client",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/clients/4",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clients",
+            "4"
+          ]
+        }
+      }
+    },
+    {
+      "name": "19. Unknown route (404)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/nope",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "nope"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api"
+    }
+  ]
+}

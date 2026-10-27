@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  DELIVERED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+  VOID
+}
+
+model Client {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(100)
+  company   String    @default("") @db.VarChar(120)
+  email     String    @unique @db.VarChar(160)
+  phone     String    @default("") @db.VarChar(20)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+
+  @@map("clients")
+}
+
+model Project {
+  id          Int           @id @default(autoincrement())
+  clientId    Int
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title       String        @db.VarChar(140)
+  brief       String        @default("") @db.VarChar(1200)
+  deadline    DateTime      @db.Date
+  status      ProjectStatus @default(DRAFT)
+  budgetPaise Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  invoices    Invoice[]
+  tasks       StudioTask[]
+
+  @@index([status])
+  @@index([deadline])
+  @@index([clientId])
+  @@map("projects")
+}
+
+model Invoice {
+  id          Int           @id @default(autoincrement())
+  projectId   Int
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  amountPaise Int
+  status      InvoiceStatus @default(UNPAID)
+  issuedOn    DateTime      @default(now()) @db.Date
+  dueOn       DateTime      @db.Date
+  paidOn      DateTime?     @db.Date
+  note        String        @default("") @db.VarChar(300)
+  createdAt   DateTime      @default(now())
+
+  @@index([status])
+  @@index([projectId])
+  @@map("invoices")
+}
+
+model StudioTask {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title     String   @db.VarChar(140)
+  notes     String   @default("") @db.VarChar(600)
+  dueDate   DateTime @db.Date
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([done])
+  @@map("tasks")
+}
